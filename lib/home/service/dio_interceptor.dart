@@ -57,6 +57,27 @@ class DioInterceptor extends Interceptor {
     // super.onResponse(response, handler);
   }
 
-
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    log('Error Message: ${err.message}');
+    log('------------------------------------');
+    log('Error Type: ${err.type}');
+    log('------------------------------------');
+    if (err.response != null) {
+      log('Error Response Data: ${err.response?.data}');
+      log('------------------------------------');
+      log('Error Response Status Code: ${err.response?.statusCode}');
+      log('------------------------------------');
+    }
+    // handle the error and continue to the next interceptor or return the error
+    handler.next(err);
+    // If you want to stop the error and return a custom response, you can use:
+    // handler.resolve(Response(
+    //   requestOptions: err.requestOptions,
+    //   data: {'custom': 'response'},
+    //   statusCode: 200,
+    // ));
+    // super.onError(err, handler);
+  }
   
 }
