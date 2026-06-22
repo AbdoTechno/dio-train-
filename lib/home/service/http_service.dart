@@ -19,16 +19,10 @@ class HttpService implements NetworkService {
         '$_baseUrl$endpoint',
       ).replace(queryParameters: queryParameters?.cast<String, String>());
 
-      print('GET Request: $uri');
-
       final response = await client.get(uri);
-
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.body}');
 
       return response;
     } catch (e) {
-      print('GET Error: $e');
       rethrow;
     }
   }
@@ -41,21 +35,14 @@ class HttpService implements NetworkService {
     try {
       final uri = Uri.parse('$_baseUrl$endpoint');
 
-      print('POST Request: $uri');
-      print('Data: ${jsonEncode(data)}');
-
       final response = await client.post(
         uri,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
       );
 
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.body}');
-
       return response;
     } catch (e) {
-      print('POST Error: $e');
       rethrow;
     }
   }
@@ -68,21 +55,14 @@ class HttpService implements NetworkService {
     try {
       final uri = Uri.parse('$_baseUrl$endpoint');
 
-      print('PUT Request: $uri');
-      print('Data: ${jsonEncode(data)}');
-
       final response = await client.put(
         uri,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
       );
 
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.body}');
-
       return response;
     } catch (e) {
-      print('PUT Error: $e');
       rethrow;
     }
   }
@@ -92,16 +72,9 @@ class HttpService implements NetworkService {
     try {
       final uri = Uri.parse('$_baseUrl$endpoint');
 
-      print('DELETE Request: $uri');
-
       final response = await client.delete(uri);
-
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.body}');
-
       return response;
     } catch (e) {
-      print('DELETE Error: $e');
       rethrow;
     }
   }

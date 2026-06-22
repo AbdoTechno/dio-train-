@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
           primary: const Color(0xFF6366F1),
           secondary: const Color(0xFFEC4899), // Pink
           surface: Colors.white,
-          background: const Color(0xFFF8FAFC), // Slate 50
         ),
         fontFamily: 'Poppins',
         appBarTheme: const AppBarTheme(

@@ -7,7 +7,6 @@ import 'package:dio_train/home/widgets/state_views.dart';
 
 class PostsPage extends StatefulWidget {
   const PostsPage({super.key});
-
   @override
   State<PostsPage> createState() => _PostsPageState();
 }
@@ -16,7 +15,6 @@ class _PostsPageState extends State<PostsPage> {
   final PostRepository _repository = PostRepository();
   late Future<PostsResponse> _postsFuture;
   final TextEditingController _searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -25,8 +23,8 @@ class _PostsPageState extends State<PostsPage> {
 
   void _searchPosts(String query) {
     setState(() {
-      _postsFuture = query.isEmpty 
-          ? _repository.getAllPosts() 
+      _postsFuture = query.isEmpty
+          ? _repository.getAllPosts()
           : _repository.searchPosts(query);
     });
   }
@@ -57,10 +55,7 @@ class _PostsPageState extends State<PostsPage> {
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: Colors.grey.shade200,
-            height: 1.0,
-          ),
+          child: Container(color: Colors.grey.shade200, height: 1.0),
         ),
       ),
       body: Column(
@@ -76,22 +71,20 @@ class _PostsPageState extends State<PostsPage> {
               future: _postsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
-                
+
                 if (snapshot.hasError) {
                   return ErrorView(
                     error: snapshot.error.toString(),
                     onRetry: () => _searchPosts(_searchController.text),
                   );
                 }
-                
+
                 if (!snapshot.hasData || snapshot.data!.posts.isEmpty) {
                   return const EmptyView();
                 }
-                
+
                 final posts = snapshot.data!.posts;
                 return ListView.separated(
                   itemCount: posts.length,

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:dio_train/home/service/dio_exception_handler.dart';
+import 'package:dio_train/home/service/dio_interceptor.dart';
 import 'package:dio_train/home/service/network_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,13 +11,16 @@ class DioService implements NetworkService {
   DioService({Dio? dio})
     : _dio =
           dio ??
-          Dio(
-            BaseOptions(
-              baseUrl: 'https://dummyjson.com/',
-              connectTimeout: const Duration(seconds: 5),
-              receiveTimeout: const Duration(seconds: 3),
-            ),
-          );
+                Dio(
+                  BaseOptions(
+                    baseUrl: 'https://dummyjson.com/',
+                    connectTimeout: const Duration(seconds: 5),
+                    receiveTimeout: const Duration(seconds: 5),
+                    sendTimeout: const Duration(seconds: 5),
+                    headers: {'Content-Type': 'application/json'},
+                  ),
+                )
+            ..interceptors.add(DioInterceptor());
 
   @override
   Future<http.Response> get(
@@ -23,23 +28,17 @@ class DioService implements NetworkService {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      print('GET Request: $endpoint');
-
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,
       );
 
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.data}');
-
       return http.Response(
         jsonEncode(response.data),
         response.statusCode ?? 200,
       );
-    } catch (e) {
-      print('GET Error: $e');
-      rethrow;
+    } on DioException catch (e) {
+      throw Exception(DioExceptionHandler.handle(e));
     }
   }
 
@@ -49,21 +48,14 @@ class DioService implements NetworkService {
     Map<String, dynamic>? data,
   }) async {
     try {
-      print('POST Request: $endpoint');
-      print('Data: ${jsonEncode(data)}');
-
       final response = await _dio.post(endpoint, data: data);
-
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.data}');
 
       return http.Response(
         jsonEncode(response.data),
         response.statusCode ?? 200,
       );
-    } catch (e) {
-      print('POST Error: $e');
-      rethrow;
+    } on DioException catch (e) {
+      throw Exception(DioExceptionHandler.handle(e));
     }
   }
 
@@ -73,41 +65,28 @@ class DioService implements NetworkService {
     Map<String, dynamic>? data,
   }) async {
     try {
-      print('PUT Request: $endpoint');
-      print('Data: ${jsonEncode(data)}');
-
       final response = await _dio.put(endpoint, data: data);
-
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.data}');
 
       return http.Response(
         jsonEncode(response.data),
         response.statusCode ?? 200,
       );
-    } catch (e) {
-      print('PUT Error: $e');
-      rethrow;
+    } on DioException catch (e) {
+      throw Exception(DioExceptionHandler.handle(e));
     }
   }
 
   @override
   Future<http.Response> delete(String endpoint) async {
     try {
-      print('DELETE Request: $endpoint');
-
       final response = await _dio.delete(endpoint);
-
-      print('Status Code: ${response.statusCode}');
-      print('Response: ${response.data}');
 
       return http.Response(
         jsonEncode(response.data),
         response.statusCode ?? 200,
       );
-    } catch (e) {
-      print('DELETE Error: $e');
-      rethrow;
+    } on DioException catch (e) {
+      throw Exception(DioExceptionHandler.handle(e));
     }
   }
 }

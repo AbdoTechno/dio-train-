@@ -1,13 +1,14 @@
 import 'package:dio_train/home/model/post_model.dart';
+import 'package:dio_train/home/service/dio_service.dart';
 import 'package:dio_train/home/service/network_service.dart';
-import 'package:dio_train/home/service/http_service.dart';
+// import 'package:dio_train/home/service/http_service.dart';
 import 'dart:convert';
 
 class PostRepository {
   final NetworkService service;
 
   PostRepository({NetworkService? service})
-    : service = service ?? HttpService();
+    : service = service ?? DioService();
 
   // Get posts with search query
   Future<PostsResponse> searchPosts(String query) async {
